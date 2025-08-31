@@ -1,13 +1,11 @@
 import { ScrollView, StyleSheet, Text, View } from 'react-native';
 
-import { HelloWave } from '@/components/HelloWave';
 
 export default function HomeScreen() {
   return (
     <ScrollView contentContainerStyle={styles.container}>
       <View style={styles.titleContainer}>
         <Text>Welcome!</Text>
-        <HelloWave />
       </View>
     </ScrollView>
   );
