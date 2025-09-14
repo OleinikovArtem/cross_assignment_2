@@ -4,7 +4,7 @@ import { colors } from '../theme/colors';
 import { spacing } from '../theme/spacing';
 
 
-export type TabKey = 'main' | 'cart' | 'orders' | 'profile';
+export type TabKey = 'index' | 'cart' | 'orders';
 
 
 export type TabBarProps = {
@@ -15,11 +15,13 @@ export type TabBarProps = {
 
 export const TabBar: React.FC<TabBarProps> = ( { current, onNavigate } ) => (
     <View style={styles.root}>
-        {( ['main', 'cart', 'orders', 'profile'] as TabKey[] ).map( ( k ) => (
+        {( ['index', 'cart', 'orders'] as TabKey[] ).map( ( k ) => {
+            const label = (k === 'index' ? 'main' : k)
+            return (
             <TouchableOpacity key={k} onPress={() => onNavigate( k )} style={styles.tab} accessibilityRole="tab">
-                <Text style={[styles.txt, current === k && styles.active]}>{k[0].toUpperCase() + k.slice( 1 )}</Text>
+                <Text style={[styles.txt, current === k && styles.active]}>{label[0].toUpperCase() + label.slice( 1 )}</Text>
             </TouchableOpacity>
-        ) )}
+        )} )}
     </View>
 );
 

@@ -8,6 +8,7 @@ import { QuantityStepper } from './QuantityStepper';
 
 
 export type ProductCardProps = {
+    id: string;
     title: string;
     price: number;
     imageUrl?: string; // optional, placeholder if missing
