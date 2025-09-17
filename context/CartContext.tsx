@@ -2,7 +2,7 @@ import React, { createContext, ReactNode, useContext, useState } from "react";
 
 type CartContextType = {
   qty: Record<string, number>;
-  setProductQty: (id: string, n: number) => void;
+  setProductQty: (id: number, n: number) => void;
 };
 
 const CartContext = createContext<CartContextType | undefined>(undefined);
@@ -10,7 +10,7 @@ const CartContext = createContext<CartContextType | undefined>(undefined);
 export function CartProvider({ children }: { children: ReactNode }) {
   const [qty, setQty] = useState<Record<string, number>>({});
 
-  const setProductQty = (id: string, n: number) =>
+  const setProductQty = (id: number, n: number) =>
     setQty((s) => ({ ...s, [id]: n }));
 
   return (

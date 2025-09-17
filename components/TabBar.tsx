@@ -15,7 +15,7 @@ export type TabBarProps = {
 
 export const TabBar: React.FC<TabBarProps> = ( { current, onNavigate } ) => (
     <View style={styles.root}>
-        {( ['index', 'cart', 'orders'] as TabKey[] ).map( ( k ) => {
+        {( ['index', 'cart', 'orders', 'productsFromRedux'] as TabKey[] ).map( ( k ) => {
             const label = (k === 'index' ? 'main' : k)
             return (
             <TouchableOpacity key={k} onPress={() => onNavigate( k )} style={styles.tab} accessibilityRole="tab">
