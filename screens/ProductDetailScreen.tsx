@@ -1,8 +1,8 @@
+import { Product } from '@/api/types';
 import React from 'react';
 import { SafeAreaView, ScrollView, StyleSheet, Text, View } from 'react-native';
 import { AppHeader } from '../components/AppHeader';
 import { Button } from '../components/Button';
-import { Product } from '../data/mock';
 import { colors } from '../theme/colors';
 import { radius } from '../theme/radius';
 import { spacing } from '../theme/spacing';
@@ -10,7 +10,7 @@ import { spacing } from '../theme/spacing';
 export type ProductDetailScreenProps = {
   product: Product;
   cartQuantities: Record<string, number>;
-  onChangeQty: (id: string, qty: number) => void;
+  onChangeQty: (id: number, qty: number) => void;
   onNavigate: (screen: string) => void;
   onBack: () => void;
 };
@@ -20,6 +20,11 @@ export const ProductDetailScreen: React.FC<ProductDetailScreenProps> = ({
   onNavigate,
   onChangeQty,
 }) => {
+  console.log(
+    'ProductDetailScreen rendered with product:',product
+  );
+  
+
   return (
     <SafeAreaView style={styles.safe}>
       <ScrollView contentContainerStyle={{ paddingBottom: 100 }}>
@@ -29,7 +34,7 @@ export const ProductDetailScreen: React.FC<ProductDetailScreenProps> = ({
           <View style={styles.image}>
             <Text>🖼️</Text>
           </View>
-          <Text style={styles.text}>{product.description}</Text>
+          <Text style={styles.text}>{product.body}</Text>
           <Button
             title="Add to cart"
             onPress={() => {

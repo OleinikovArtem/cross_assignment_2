@@ -1,7 +1,7 @@
 import { useLocalSearchParams, useRouter } from "expo-router";
 import React from "react";
+import { useProductById } from "../../api/hooks";
 import { useCart } from "../../context/CartContext";
-import { products } from "../../data/mock";
 import { ProductDetailScreen } from "../../screens/ProductDetailScreen";
 
 export default function ProductDetail() {
@@ -9,7 +9,7 @@ export default function ProductDetail() {
   const { qty, setProductQty } = useCart();
   const router = useRouter();
 
-  const product = products.find((p) => p.id === id);    
+  const { product } = useProductById(Number(id));
 
   if (!product) {
     return null;
