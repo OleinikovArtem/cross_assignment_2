@@ -5,6 +5,7 @@ import { radius } from '../theme/radius';
 import { spacing } from '../theme/spacing';
 import { type } from '../theme/typography';
 import { QuantityStepper } from './QuantityStepper';
+import { RatingStars } from './RatingStars';
 
 // Увімкнути LayoutAnimation для Android
 if (Platform.OS === 'android') {
@@ -20,12 +21,13 @@ export type ProductCardProps = {
     price: number;
     imageUrl?: string; // optional, placeholder if missing
     quantity: number;
+    rating?: number;
     onChangeQty: ( n: number ) => void;
     onDetails?: () => void;
 };
 
 
-export const ProductCard: React.FC<ProductCardProps> = React.memo(( { title, price, imageUrl, quantity, onChangeQty, onDetails } ) => {
+export const ProductCard: React.FC<ProductCardProps> = React.memo(( { title, price, imageUrl, quantity, rating, onChangeQty, onDetails } ) => {
     const { width } = useWindowDimensions();
     const cardWidth = Math.min( 500, width - spacing.xl * 2 ); // simple adaptivity
 
@@ -50,6 +52,7 @@ export const ProductCard: React.FC<ProductCardProps> = React.memo(( { title, pri
 
             <View style={styles.center}>
                 <Text numberOfLines={1} style={styles.title}>{title}</Text>
+                {rating && <RatingStars rating={rating} size="small" />}
                 <TouchableOpacity onPress={onDetails}><Text style={styles.details}>Details</Text></TouchableOpacity>
                 <QuantityStepper value={quantity} onChange={handleQuantityChange} />
             </View>
