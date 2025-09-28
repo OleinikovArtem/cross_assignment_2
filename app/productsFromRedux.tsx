@@ -1,24 +1,19 @@
-import { useProducts } from '@/api/hooks'; // ← твой хук
+import { useProducts } from '@/api/hooks';
 import React, { useEffect } from 'react';
 import { ActivityIndicator, FlatList, SafeAreaView, StyleSheet, Text, View } from 'react-native';
-import { useDispatch, useSelector } from 'react-redux';
-import { setProducts } from '../redux/productsSlice';
-import { AppDispatch, RootState } from '../redux/store';
+import { useProductsStore } from '../store/productsStore';
 
-const ProductsFromReduxScreen: React.FC = () => {
-  const dispatch = useDispatch<AppDispatch>();
-  const products = useSelector((state: RootState) => state.products);
-
+const ProductsFromZustandScreen: React.FC = () => {
+  const { products, setProducts } = useProductsStore();
   const { products: apiProducts, loading, error } = useProducts();
 
   useEffect(() => {
     if (apiProducts.length > 0) {
-      dispatch(setProducts(apiProducts));
+      setProducts(apiProducts);
     }
-  }, [apiProducts, dispatch]);
+  }, [apiProducts, setProducts]);
 
-
-  console.log('ProductsFromReduxScreen rendered with products:', products);
+  console.log('ProductsFromZustandScreen rendered with products:', products);
   
 
   return (
@@ -59,4 +54,4 @@ const styles = StyleSheet.create({
   title: { fontSize: 16 },
 });
 
-export default ProductsFromReduxScreen;
+export default ProductsFromZustandScreen;

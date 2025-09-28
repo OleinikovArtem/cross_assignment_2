@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+import { useProductsStore } from '../store/productsStore';
 import { fetchProductById, fetchProducts } from './api';
 import { Product } from './types';
 
@@ -35,8 +36,16 @@ export const useFetch = <T>(fetcher: () => Promise<T>, deps: any[] = []) => {
 
 
 export const useProducts = () => {
+  const { products, setProducts } = useProductsStore();
   const { data, loading, error } = useFetch<Product[]>(fetchProducts, []);
-  return { products: data ?? [], loading, error };
+  
+  useEffect(() => {
+    if (data) {
+      setProducts(data);
+    }
+  }, [data, setProducts]);
+  
+  return { products, loading, error };
 };
 
 export const useProductById = (id: number) => {

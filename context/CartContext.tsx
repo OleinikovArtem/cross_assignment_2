@@ -1,4 +1,4 @@
-import React, { createContext, ReactNode, useContext, useState } from "react";
+import React, { createContext, ReactNode, useCallback, useContext, useState } from "react";
 
 type CartContextType = {
   qty: Record<string, number>;
@@ -10,11 +10,17 @@ const CartContext = createContext<CartContextType | undefined>(undefined);
 export function CartProvider({ children }: { children: ReactNode }) {
   const [qty, setQty] = useState<Record<string, number>>({});
 
-  const setProductQty = (id: number, n: number) =>
+  const setProductQty = useCallback((id: number, n: number) => {
     setQty((s) => ({ ...s, [id]: n }));
+  }, []);
+
+  const value = React.useMemo(() => ({
+    qty,
+    setProductQty,
+  }), [qty, setProductQty]);
 
   return (
-    <CartContext.Provider value={{ qty, setProductQty }}>
+    <CartContext.Provider value={value}>
       {children}
     </CartContext.Provider>
   );

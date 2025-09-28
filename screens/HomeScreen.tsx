@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useCallback, useMemo, useState } from 'react';
 import { ActivityIndicator, FlatList, SafeAreaView, StyleSheet, Text, View } from 'react-native';
 import { useProducts } from '../api/hooks';
 import { AppHeader } from '../components/AppHeader';
@@ -21,6 +21,39 @@ export const HomeScreen: React.FC<HomeScreenProps> = ({
 }) => {
   const [selected, setSelected] = useState('all');
   const { products, loading, error } = useProducts();
+
+  // Мемоізуємо обробники подій
+  const handleCategorySelect = useCallback((id: string) => {
+    setSelected(id);
+  }, []);
+
+  const handleProductQtyChange = useCallback((id: number, qty: number) => {
+    onChangeQty(id, qty);
+  }, [onChangeQty]);
+
+  const handleProductDetails = useCallback((id: number) => {
+    onNavigate(`product/${id}`);
+  }, [onNavigate]);
+
+  // Мемоізуємо відфільтровані продукти
+  const filteredProducts = useMemo(() => {
+    if (selected === 'all') return products;
+    return products.filter(product => product.category === selected);
+  }, [products, selected]);
+
+  // Мемоізуємо keyExtractor
+  const keyExtractor = useCallback((item: any) => item.id.toString(), []);
+
+  // Мемоізуємо renderItem
+  const renderItem = useCallback(({ item }: { item: any }) => (
+    <ProductCard
+      title={item.title}
+      price={item.id} // Using id as a placeholder for price
+      quantity={cartQuantities[item.id] ?? 0}
+      onChangeQty={(n) => handleProductQtyChange(item.id, n)}
+      onDetails={() => handleProductDetails(item.id)}
+    />
+  ), [cartQuantities, handleProductQtyChange, handleProductDetails]);
 
   return (
     <SafeAreaView style={styles.safe}>
@@ -47,22 +80,14 @@ export const HomeScreen: React.FC<HomeScreenProps> = ({
               <CategoryStrip
                 items={categories}
                 selectedId={selected}
-                onSelect={setSelected}
+                onSelect={handleCategorySelect}
               />
               <View style={{ height: spacing.m }} />
             </View>
           }
-          data={products}
-          keyExtractor={(item) => item.id.toString()}
-          renderItem={({ item }) => (
-            <ProductCard
-              title={item.title}
-              price={item.id} // Using id as a placeholder for price
-              quantity={cartQuantities[item.id] ?? 0}
-              onChangeQty={(n) => onChangeQty(item.id, n)}
-              onDetails={() => onNavigate(`product/${item.id}`)}
-            />
-          )}
+          data={filteredProducts}
+          keyExtractor={keyExtractor}
+          renderItem={renderItem}
           contentContainerStyle={{ paddingBottom: 80 }}
           ListEmptyComponent={
             <View style={styles.center}>
